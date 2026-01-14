@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -134,29 +135,23 @@ export default function TopHeader() {
                   {session?.user?.name || (address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'JBC')}님
                 </span>
               </div>
-              <button 
-                onClick={async () => {
-                  if (session) {
-                    await signOut({ callbackUrl: '/' })
-                  } else {
-                    localStorage.removeItem('hb_user')
-                    window.dispatchEvent(new Event('loginStateChange'))
-                    router.push('/')
-                  }
-                }}
-                style={{ 
-                  padding: '8px 16px', 
-                  borderRadius: '20px', 
-                  border: '1px solid var(--border-color)', 
-                  backgroundColor: 'transparent', 
-                  color: 'var(--text-primary)', 
-                  fontWeight: 'bold', 
-                  cursor: 'pointer', 
-                  fontSize: '13px' 
-                }}
-              >
-                로그아웃
-              </button>
+
+              <button
+  onClick={() => signOut({ callbackUrl: "/" })}
+  style={{ 
+    padding: '8px 16px', 
+    borderRadius: '20px', 
+    border: '1px solid var(--border-color)', 
+    backgroundColor: 'transparent', 
+    color: 'var(--text-primary)', 
+    fontWeight: 'bold', 
+    cursor: 'pointer', 
+    fontSize: '13px' 
+  }}
+>
+  로그아웃
+</button>
+
             </>
           ) : (
             <>
@@ -164,13 +159,13 @@ export default function TopHeader() {
                 지갑 연결 (준비중)
               </button>
               <button 
-                onClick={openLoginModal}
+                onClick={() => router.push("/login")}
                 style={{ padding: '10px 24px', borderRadius: '999px', border: 'none', backgroundColor: 'transparent', color: 'var(--text-primary)', fontWeight: '600', cursor: 'pointer', fontSize: '14px' }}
               >
                 로그인
               </button>
               <button 
-                onClick={openLoginModal}
+                onClick={() => router.push("/login")}
                 style={{ padding: '10px 24px', borderRadius: '999px', backgroundColor: 'var(--accent-color)', color: 'white', fontWeight: '600', border: 'none', cursor: 'pointer', fontSize: '14px', boxShadow: '0 4px 12px rgba(49, 130, 246, 0.3)', transition: 'all 0.2s' }}
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}

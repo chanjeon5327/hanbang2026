@@ -5,12 +5,31 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 const handler = NextAuth({
   providers: [
-    KakaoProvider({
-      clientId: process.env.KAKAO_CLIENT_ID || "",
-      clientSecret: process.env.KAKAO_CLIENT_SECRET || "",
-      checks: ['none'],
-      allowDangerousEmailAccountLinking: true, // [필수] 강제 계정 통합
-    }),
+   
+      KakaoProvider({
+        clientId: process.env.KAKAO_CLIENT_ID!,
+        clientSecret: process.env.KAKAO_CLIENT_SECRET!,
+        authorization: {
+          params: {
+            scope: "profile_nickname account_email",
+          },
+        },
+        checks: ["none"],
+        allowDangerousEmailAccountLinking: true,
+        profile(profile) {
+          return {
+            id: String(profile.id),
+            name: profile.kakao_account?.profile?.nickname ?? "kakao-user",
+            email: profile.kakao_account?.email ?? null,
+            image:
+              profile.kakao_account?.profile?.profile_image_url ??
+              profile.properties?.profile_image ??
+              null,
+          };
+        },
+      }),
+      
+    
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
